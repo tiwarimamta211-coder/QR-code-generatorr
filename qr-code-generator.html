@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR Code Generator – Free Online Tool</title>
+<meta name="description" content="Generate QR codes instantly. Add logo, customize colors, download PNG or SVG.">
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- QR Code Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #0b0c10;
+    --surface:   #13151b;
+    --card:      #1a1d27;
+    --border:    #2a2d3a;
+    --accent:    #7c6aff;
+    --accent2:   #00e5c3;
+    --text:      #eef0f7;
+    --muted:     #7b7e96;
+    --danger:    #ff5c5c;
+    --radius:    14px;
+    --mono:      'DM Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.2rem;
+    letter-spacing: -0.02em;
+  }
+  .logo span { color: var(--accent); }
+  .badge {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  /* ── AD BANNER TOP ── */
+  .ad-top {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 24px;
+    text-align: center;
+  }
+  .ad-label {
+    font-size: 0.6rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+  .ad-placeholder {
+    background: var(--card);
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-family: var(--mono);
+    margin: 0 auto;
+  }
+  .ad-728 { width: min(728px, 100%); height: 90px; }
+  .ad-320 { width: 320px; height: 50px; }
+
+  /* ── MAIN LAYOUT ── */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 20px 60px;
+  }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+  .hero-title .hl { color: var(--accent); }
+  .hero-sub {
+    color: var(--muted);
+    font-size: 1rem;
+    margin-bottom: 36px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 24px;
+    align-items: start;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+  }
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 14px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  /* ── FORM ELEMENTS ── */
+  label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .field { margin-bottom: 20px; }
+
+  input[type="text"],
+  input[type="url"],
+  textarea,
+  select {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    padding: 12px 14px;
+    transition: border-color 0.2s;
+    outline: none;
+    resize: vertical;
+  }
+  input[type="text"]:focus,
+  input[type="url"]:focus,
+  textarea:focus,
+  select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(124,106,255,0.15);
+  }
+  textarea { min-height: 90px; font-size: 0.9rem; }
+  select option { background: var(--card); }
+
+  .char-count {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-align: right;
+    margin-top: 4px;
+  }
+  .char-count.warn { color: var(--danger); }
+
+  /* color row */
+  .color-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .color-field label { margin-bottom: 6px; }
+  .color-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .color-input-wrap:focus-within { border-color: var(--accent); }
+  input[type="color"] {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0;
+    border-radius: 50%;
+  }
+  .color-hex {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--text);
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    padding: 0;
+    width: 80px;
+  }
+
+  /* slider */
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 4px;
+    background: var(--border);
+    border-radius: 4px;
+    outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background: var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 0 3px rgba(124,106,255,0.25);
+  }
+  .slider-val {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--text);
+    min-width: 36px;
+    text-align: right;
+  }
+
+  /* logo upload */
+  .upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    position: relative;
+  }
+  .upload-zone:hover, .upload-zone.drag { border-color: var(--accent); background: rgba(124,106,255,0.05); }
+  .upload-zone input[type="file"] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+  .upload-icon { font-size: 1.8rem; margin-bottom: 6px; }
+  .upload-text { font-size: 0.82rem; color: var(--muted); }
+  .upload-text strong { color: var(--accent); }
+  .logo-preview-strip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 8px 12px;
+  }
+  .logo-preview-strip img { width: 36px; height: 36px; object-fit: contain; border-radius: 4px; }
+  .logo-name { font-size: 0.8rem; color: var(--muted); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .remove-logo {
+    background: none;
+    border: none;
+    color: var(--danger);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: background 0.2s;
+  }
+  .remove-logo:hover { background: rgba(255,92,92,0.12); }
+
+  /* error correction select */
+  .ec-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  /* ── GENERATE BUTTON ── */
+  .btn-gen {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--accent), #5a4fcf);
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.02em;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(124,106,255,0.35);
+    margin-top: 8px;
+  }
+  .btn-gen:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(124,106,255,0.45); }
+  .btn-gen:active { transform: translateY(0); }
+  .btn-gen:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* ── QR PREVIEW PANEL ── */
+  .preview-panel {
+    position: sticky;
+    top: 80px;
+  }
+  .qr-frame {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    text-align: center;
+  }
+  .qr-canvas-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: 12px;
+    padding: 12px;
+    position: relative;
+    min-width: 220px;
+    min-height: 220px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.1);
+  }
+  #qr-output { line-height: 0; }
+  #qr-output canvas, #qr-output img { display: block; }
+
+  .qr-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    padding: 30px;
+  }
+  .qr-placeholder svg { opacity: 0.25; }
+
+  /* download buttons */
+  .dl-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .btn-dl {
+    padding: 11px;
+    border-radius: 10px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .btn-png {
+    background: rgba(0,229,195,0.12);
+    color: var(--accent2);
+    border: 1px solid rgba(0,229,195,0.25);
+  }
+  .btn-png:hover { background: rgba(0,229,195,0.22); }
+  .btn-svg {
+    background: rgba(124,106,255,0.12);
+    color: var(--accent);
+    border: 1px solid rgba(124,106,255,0.25);
+  }
+  .btn-svg:hover { background: rgba(124,106,255,0.22); }
+  .btn-dl:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  .btn-copy {
+    width: 100%;
+    padding: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--muted);
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .btn-copy:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .btn-copy:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  /* ── QR SIZE INFO ── */
+  .qr-meta {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* ── AD SIDEBAR ── */
+  .ad-sidebar { margin-top: 20px; }
+  .ad-300 { width: 300px; height: 250px; margin: 0 auto; }
+
+  /* ── AD BOTTOM ── */
+  .ad-bottom-wrap {
+    max-width: 1100px;
+    margin: 40px auto 0;
+    padding: 0 20px;
+    text-align: center;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .how-section {
+    max-width: 1100px;
+    margin: 60px auto 0;
+    padding: 0 20px;
+  }
+  .how-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .step-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .step-num {
+    font-family: var(--mono);
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--accent);
+    opacity: 0.6;
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+  .step-title { font-weight: 600; margin-bottom: 6px; font-size: 0.9rem; }
+  .step-desc { font-size: 0.82rem; color: var(--muted); }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--accent2);
+    color: #0b0c10;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 12px 20px;
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(0,229,195,0.3);
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 999;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    text-align: center;
+    padding: 28px 20px;
+    margin-top: 80px;
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 800px) {
+    .grid { grid-template-columns: 1fr; }
+    .preview-panel { position: static; }
+    .ad-300 { width: 100%; }
+    .ad-728 { display: none; }
+    .ad-320 { display: flex; }
+  }
+  @media (min-width: 801px) {
+    .ad-320 { display: none; }
+    .ad-728 { display: flex; }
+  }
+
+  /* reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; }
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* tab pills */
+  .type-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .tab-pill {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: none;
+    color: var(--muted);
+    transition: all 0.18s;
+  }
+  .tab-pill:hover { border-color: var(--accent); color: var(--accent); }
+  .tab-pill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  /* pattern select */
+  .pattern-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .pattern-btn {
+    aspect-ratio: 1;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: border-color 0.18s;
+  }
+  .pattern-btn.active { border-color: var(--accent); background: rgba(124,106,255,0.1); }
+  .pattern-btn:hover { border-color: var(--accent); }
+
+  /* toggle */
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-top: 1px solid var(--border);
+    margin-top: 4px;
+  }
+  .toggle-label { font-size: 0.85rem; color: var(--muted); }
+  .toggle {
+    position: relative;
+    width: 40px;
+    height: 22px;
+    cursor: pointer;
+  }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-track {
+    position: absolute;
+    inset: 0;
+    background: var(--border);
+    border-radius: 22px;
+    transition: background 0.2s;
+  }
+  .toggle input:checked + .toggle-track { background: var(--accent); }
+  .toggle-thumb {
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 16px; height: 16px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.2s;
+    pointer-events: none;
+  }
+  .toggle input:checked ~ .toggle-thumb { transform: translateX(18px); }
+
+  /* loading ring */
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spin { animation: spin 0.7s linear infinite; display: inline-block; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo">QR<span>craft</span> <span class="badge">FREE</span></div>
+    <div style="font-size:0.78rem;color:var(--muted);">No signup · No watermark</div>
+  </div>
+</header>
+
+<!-- TOP AD BANNER -->
+<div class="ad-top">
+  <div class="ad-label">Advertisement</div>
+  <!-- Desktop 728×90 -->
+  <div class="ad-728 ad-placeholder">
+    <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+    <span style="display:none" id="ad-728-fallback">[ 728×90 Ad Unit ]</span>
+  </div>
+  <!-- Mobile 320×50 -->
+  <div class="ad-320 ad-placeholder">
+    <ins class="adsbygoogle" style="display:inline-block;width:320px;height:50px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main>
+  <h1 class="hero-title">Generate a <span class="hl">QR Code</span><br>in seconds.</h1>
+  <p class="hero-sub">URL, text, email, phone — customize colors, add your logo, download free.</p>
+
+  <div class="grid">
+
+    <!-- LEFT: CONTROLS -->
+    <div>
+      <!-- Input Card -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-title">Content</div>
+
+        <div class="type-tabs">
+          <button class="tab-pill active" data-prefix="">URL / Text</button>
+          <button class="tab-pill" data-prefix="mailto:">Email</button>
+          <button class="tab-pill" data-prefix="tel:">Phone</button>
+          <button class="tab-pill" data-prefix="sms:">SMS</button>
+          <button class="tab-pill" data-prefix="WIFI:T:WPA;S:;P:;;">Wi-Fi</button>
+        </div>
+
+        <div class="field" id="field-default">
+          <label for="qr-input">Enter URL, text, or any content</label>
+          <textarea id="qr-input" placeholder="https://example.com or any text…" maxlength="2048"></textarea>
+          <div class="char-count"><span id="char-num">0</span> / 2048</div>
+        </div>
+
+        <!-- Wi-Fi special fields (hidden by default) -->
+        <div id="field-wifi" style="display:none">
+          <div class="field">
+            <label>Wi-Fi Network Name (SSID)</label>
+            <input type="text" id="wifi-ssid" placeholder="MyNetwork">
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input type="text" id="wifi-pass" placeholder="password123">
+          </div>
+          <div class="field">
+            <label>Security</label>
+            <select id="wifi-sec">
+              <option value="WPA">WPA/WPA2</option>
+              <option value="WEP">WEP</option>
+              <option value="nopass">None</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Appearance Card -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-title">Appearance</div>
+
+        <div class="color-row field">
+          <div class="color-field">
+            <label>Foreground (dots)</label>
+            <div class="color-input-wrap">
+              <input type="color" id="color-fg" value="#000000">
+              <input type="text" class="color-hex" id="hex-fg" value="#000000" maxlength="7">
+            </div>
+          </div>
+          <div class="color-field">
+            <label>Background</label>
+            <div class="color-input-wrap">
+              <input type="color" id="color-bg" value="#ffffff">
+              <input type="text" class="color-hex" id="hex-bg" value="#ffffff" maxlength="7">
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>QR Size</label>
+          <div class="slider-row">
+            <input type="range" id="size-range" min="128" max="512" value="256" step="32">
+            <span class="slider-val" id="size-val">256px</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Margin (quiet zone)</label>
+          <div class="slider-row">
+            <input type="range" id="margin-range" min="0" max="10" value="2" step="1">
+            <span class="slider-val" id="margin-val">2</span>
+          </div>
+        </div>
+
+        <div class="ec-row field">
+          <div>
+            <label>Error Correction</label>
+            <select id="ec-level">
+              <option value="L">L – 7%</option>
+              <option value="M">M – 15%</option>
+              <option value="Q" selected>Q – 25%</option>
+              <option value="H">H – 30%</option>
+            </select>
+          </div>
+          <div>
+            <label>Version (1–40)</label>
+            <select id="qr-version">
+              <option value="0">Auto</option>
+              <script>for(let i=1;i<=40;i++) document.write(`<option value="${i}">${i}</option>`)</script>
+            </select>
+          </div>
+        </div>
+
+        <div class="toggle-row">
+          <span class="toggle-label">Rounded dots (round style)</span>
+          <label class="toggle">
+            <input type="checkbox" id="toggle-round">
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Logo Card -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-title">Logo / Icon (center)</div>
+
+        <div class="upload-zone" id="upload-zone">
+          <input type="file" id="logo-file" accept="image/*">
+          <div class="upload-icon">🖼️</div>
+          <div class="upload-text"><strong>Click to upload</strong> or drag & drop<br>PNG, JPG, SVG, WebP — max 2 MB</div>
+        </div>
+        <div id="logo-strip" style="display:none" class="logo-preview-strip">
+          <img id="logo-thumb" src="" alt="logo">
+          <span class="logo-name" id="logo-fname"></span>
+          <button class="remove-logo" id="remove-logo" title="Remove logo">✕</button>
+        </div>
+
+        <div class="field" id="logo-size-field" style="margin-top:14px;display:none">
+          <label>Logo size (% of QR)</label>
+          <div class="slider-row">
+            <input type="range" id="logo-size" min="5" max="30" value="18" step="1">
+            <span class="slider-val" id="logo-size-val">18%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Generate -->
+      <button class="btn-gen" id="btn-gen">⚡ Generate QR Code</button>
+    </div>
+
+    <!-- RIGHT: PREVIEW + DOWNLOAD -->
+    <div class="preview-panel">
+      <div class="qr-frame">
+        <div class="card-title">Preview</div>
+        <div class="qr-canvas-wrap" id="qr-wrap">
+          <div id="qr-output">
+            <div class="qr-placeholder">
+              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+                <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="3" height="3"/>
+                <rect x="19" y="14" width="2" height="2"/><rect x="14" y="19" width="2" height="2"/><rect x="18" y="18" width="3" height="3"/>
+              </svg>
+              Enter content and click Generate
+            </div>
+          </div>
+        </div>
+
+        <div class="dl-row">
+          <button class="btn-dl btn-png" id="btn-png" disabled>↓ PNG</button>
+          <button class="btn-dl btn-svg" id="btn-svg" disabled>↓ SVG</button>
+        </div>
+        <button class="btn-copy" id="btn-copy" disabled>📋 Copy to clipboard</button>
+
+        <div class="qr-meta" id="qr-meta" style="display:none">
+          <span id="meta-size">–</span>
+          <span id="meta-ec">–</span>
+        </div>
+      </div>
+
+      <!-- Sidebar Ad 300×250 -->
+      <div class="ad-sidebar">
+        <div class="ad-label" style="font-size:0.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;text-align:center;margin-bottom:6px;">Advertisement</div>
+        <div class="ad-300 ad-placeholder">
+          <ins class="adsbygoogle" style="display:inline-block;width:300px;height:250px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- BOTTOM AD -->
+<div class="ad-bottom-wrap">
+  <div class="ad-label" style="font-size:0.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">Advertisement</div>
+  <div class="ad-728 ad-placeholder" style="margin:0 auto;">
+    <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <div class="how-title">How it works</div>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">01</div>
+      <div class="step-title">Enter your content</div>
+      <div class="step-desc">Type a URL, plain text, email, phone number, or Wi-Fi credentials.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">02</div>
+      <div class="step-title">Customize design</div>
+      <div class="step-desc">Pick foreground & background colors, set size, and adjust margin.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">03</div>
+      <div class="step-title">Add your logo</div>
+      <div class="step-desc">Upload a PNG or SVG logo — it appears centered inside the QR code.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">04</div>
+      <div class="step-title">Download free</div>
+      <div class="step-desc">Save as high-res PNG or vector SVG. No watermark, no account needed.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>QRcraft — Free QR Code Generator &nbsp;·&nbsp; No signup &nbsp;·&nbsp; No watermark</p>
+  <p style="margin-top:6px;font-size:0.72rem;">Generated QR codes are yours to use freely. Works offline after first load.</p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ─── STATE ─── */
+let logoDataURL = null;
+let currentCanvas = null;
+let activePrefix = '';
+let isWifi = false;
+
+/* ─── ELEMENTS ─── */
+const qrInput    = document.getElementById('qr-input');
+const charNum    = document.getElementById('char-num');
+const colorFg    = document.getElementById('color-fg');
+const colorBg    = document.getElementById('color-bg');
+const hexFg      = document.getElementById('hex-fg');
+const hexBg      = document.getElementById('hex-bg');
+const sizeRange  = document.getElementById('size-range');
+const sizeVal    = document.getElementById('size-val');
+const marginRange= document.getElementById('margin-range');
+const marginVal  = document.getElementById('margin-val');
+const ecLevel    = document.getElementById('ec-level');
+const qrVersion  = document.getElementById('qr-version');
+const toggleRound= document.getElementById('toggle-round');
+const logoFile   = document.getElementById('logo-file');
+const uploadZone = document.getElementById('upload-zone');
+const logoStrip  = document.getElementById('logo-strip');
+const logoThumb  = document.getElementById('logo-thumb');
+const logoFname  = document.getElementById('logo-fname');
+const removeLogo = document.getElementById('remove-logo');
+const logoSizeF  = document.getElementById('logo-size-field');
+const logoSizeR  = document.getElementById('logo-size');
+const logoSizeV  = document.getElementById('logo-size-val');
+const btnGen     = document.getElementById('btn-gen');
+const btnPng     = document.getElementById('btn-png');
+const btnSvg     = document.getElementById('btn-svg');
+const btnCopy    = document.getElementById('btn-copy');
+const qrOutput   = document.getElementById('qr-output');
+const qrMeta     = document.getElementById('qr-meta');
+const metaSize   = document.getElementById('meta-size');
+const metaEc     = document.getElementById('meta-ec');
+const toast      = document.getElementById('toast');
+
+/* ─── CHAR COUNT ─── */
+qrInput.addEventListener('input', () => {
+  const n = qrInput.value.length;
+  charNum.textContent = n;
+  charNum.parentElement.classList.toggle('warn', n > 1800);
+});
+
+/* ─── COLOR SYNC ─── */
+function syncColor(picker, hex) {
+  picker.addEventListener('input', () => { hex.value = picker.value; });
+  hex.addEventListener('input', () => {
+    const v = hex.value;
+    if (/^#[0-9a-fA-F]{6}$/.test(v)) picker.value = v;
+  });
+}
+syncColor(colorFg, hexFg);
+syncColor(colorBg, hexBg);
+
+/* ─── SLIDERS ─── */
+sizeRange.addEventListener('input',   () => sizeVal.textContent   = sizeRange.value + 'px');
+marginRange.addEventListener('input', () => marginVal.textContent = marginRange.value);
+logoSizeR.addEventListener('input',   () => logoSizeV.textContent = logoSizeR.value + '%');
+
+/* ─── TYPE TABS ─── */
+document.querySelectorAll('.tab-pill').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-pill').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activePrefix = btn.dataset.prefix;
+    isWifi = activePrefix.startsWith('WIFI');
+    document.getElementById('field-default').style.display = isWifi ? 'none' : 'block';
+    document.getElementById('field-wifi').style.display    = isWifi ? 'block' : 'none';
+  });
+});
+
+/* ─── LOGO UPLOAD ─── */
+logoFile.addEventListener('change', handleLogoFile);
+uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag'); });
+uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag'));
+uploadZone.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadZone.classList.remove('drag');
+  const f = e.dataTransfer.files[0];
+  if (f) processLogoFile(f);
+});
+
+function handleLogoFile(e) {
+  const f = e.target.files[0];
+  if (f) processLogoFile(f);
+}
+function processLogoFile(f) {
+  if (f.size > 2 * 1024 * 1024) { showToast('File too large — max 2 MB'); return; }
+  const r = new FileReader();
+  r.onload = ev => {
+    logoDataURL = ev.target.result;
+    logoThumb.src = logoDataURL;
+    logoFname.textContent = f.name;
+    logoStrip.style.display = 'flex';
+    logoSizeF.style.display = 'block';
+    showToast('Logo uploaded ✓');
+  };
+  r.readAsDataURL(f);
+}
+removeLogo.addEventListener('click', () => {
+  logoDataURL = null;
+  logoFile.value = '';
+  logoStrip.style.display = 'none';
+  logoSizeF.style.display = 'none';
+  showToast('Logo removed');
+});
+
+/* ─── BUILD CONTENT STRING ─── */
+function buildContent() {
+  if (isWifi) {
+    const ssid = document.getElementById('wifi-ssid').value.trim();
+    const pass = document.getElementById('wifi-pass').value;
+    const sec  = document.getElementById('wifi-sec').value;
+    return `WIFI:T:${sec};S:${ssid};P:${pass};;`;
+  }
+  return activePrefix + qrInput.value.trim();
+}
+
+/* ─── GENERATE ─── */
+btnGen.addEventListener('click', generateQR);
+
+function generateQR() {
+  const content = buildContent();
+  if (!content || content.length < 1) { showToast('Please enter some content first'); return; }
+
+  btnGen.disabled = true;
+  btnGen.innerHTML = '<span class="spin">⚙️</span> Generating…';
+
+  qrOutput.innerHTML = '';
+
+  const size      = parseInt(sizeRange.value);
+  const margin    = parseInt(marginRange.value);
+  const fgColor   = hexFg.value || colorFg.value;
+  const bgColor   = hexBg.value || colorBg.value;
+  const ecMap     = { L: QRCode.CorrectLevel.L, M: QRCode.CorrectLevel.M, Q: QRCode.CorrectLevel.Q, H: QRCode.CorrectLevel.H };
+  const ec        = ecMap[ecLevel.value] || QRCode.CorrectLevel.Q;
+  const version   = parseInt(qrVersion.value) || 0;
+
+  try {
+    const qr = new QRCode(qrOutput, {
+      text:          content,
+      width:         size,
+      height:        size,
+      colorDark:     fgColor,
+      colorLight:    bgColor,
+      correctLevel:  ec,
+      ...(version > 0 ? { version } : {})
+    });
+
+    setTimeout(() => {
+      const canvas = qrOutput.querySelector('canvas');
+      if (!canvas) { showToast('QR generation failed — try shorter content'); reset(); return; }
+
+      /* Apply margin by redrawing on larger canvas */
+      const cellSize  = size / (canvas.width / (devicePixelRatio || 1));
+      const marginPx  = margin * Math.floor(size / 29); /* approx cell width */
+      const final     = document.createElement('canvas');
+      const totalSize = size + marginPx * 2;
+      final.width  = totalSize;
+      final.height = totalSize;
+      const ctx = final.getContext('2d');
+      ctx.fillStyle = bgColor;
+      ctx.fillRect(0, 0, totalSize, totalSize);
+      ctx.drawImage(canvas, marginPx, marginPx, size, size);
+
+      /* Rounded dots overlay (cosmetic approximation) */
+      if (toggleRound.checked) {
+        applyRoundedDots(canvas, final, ctx, marginPx, size, fgColor, bgColor);
+      }
+
+      /* Overlay logo */
+      if (logoDataURL) {
+        const img = new Image();
+        img.onload = () => {
+          const pct   = parseInt(logoSizeR.value) / 100;
+          const lw    = totalSize * pct;
+          const lh    = lw;
+          const lx    = (totalSize - lw) / 2;
+          const ly    = (totalSize - lh) / 2;
+          /* White background behind logo */
+          const pad = lw * 0.12;
+          ctx.fillStyle = '#ffffff';
+          roundRect(ctx, lx - pad, ly - pad, lw + pad*2, lh + pad*2, 8);
+          ctx.fill();
+          ctx.drawImage(img, lx, ly, lw, lh);
+          finalize(final, totalSize, content, ec);
+        };
+        img.onerror = () => finalize(final, totalSize, content, ec);
+        img.src = logoDataURL;
+      } else {
+        finalize(final, totalSize, content, ec);
+      }
+    }, 80);
+
+  } catch(e) {
+    showToast('Error: ' + e.message);
+    reset();
+  }
+}
+
+function applyRoundedDots(srcCanvas, dstCanvas, ctx, marginPx, size, fgColor, bgColor) {
+  /* Read source pixels and draw circles instead */
+  const tmpCtx = srcCanvas.getContext('2d');
+  const imgData = tmpCtx.getImageData(0, 0, srcCanvas.width, srcCanvas.height);
+  const data = imgData.data;
+  const cw = srcCanvas.width;
+
+  // Find module size
+  let firstDark = -1;
+  for (let x = 0; x < cw; x++) {
+    const i = (7 * cw + x) * 4; // row 7
+    if (data[i] < 128) { if (firstDark < 0) firstDark = x; } else if (firstDark >= 0) break;
+  }
+  // Refill bg
+  ctx.fillStyle = bgColor;
+  ctx.fillRect(marginPx, marginPx, size, size);
+
+  const scale = size / cw;
+  const modules = Math.round(cw / (firstDark > 0 ? firstDark : 10));
+  const modSize = size / modules;
+  const r = modSize * 0.45;
+
+  for (let row = 0; row < cw; row++) {
+    for (let col = 0; col < cw; col++) {
+      const i = (row * cw + col) * 4;
+      if (data[i] < 128) {
+        const cx = marginPx + col * scale + scale / 2;
+        const cy = marginPx + row * scale + scale / 2;
+        ctx.fillStyle = fgColor;
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+  }
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+function finalize(canvas, totalSize, content, ec) {
+  currentCanvas = canvas;
+  qrOutput.innerHTML = '';
+  qrOutput.appendChild(canvas);
+
+  btnPng.disabled  = false;
+  btnSvg.disabled  = false;
+  btnCopy.disabled = false;
+  qrMeta.style.display = 'flex';
+  metaSize.textContent = totalSize + '×' + totalSize + ' px';
+  const ecLabels = { [QRCode.CorrectLevel.L]: 'EC: Low', [QRCode.CorrectLevel.M]: 'EC: Medium', [QRCode.CorrectLevel.Q]: 'EC: Quartile', [QRCode.CorrectLevel.H]: 'EC: High' };
+  metaEc.textContent = ecLabels[ec] || 'EC: Q';
+
+  showToast('QR Code ready ✓');
+  reset();
+}
+
+function reset() {
+  btnGen.disabled = false;
+  btnGen.innerHTML = '⚡ Generate QR Code';
+}
+
+/* ─── DOWNLOADS ─── */
+btnPng.addEventListener('click', () => {
+  if (!currentCanvas) return;
+  const link = document.createElement('a');
+  link.download = 'qrcode.png';
+  link.href = currentCanvas.toDataURL('image/png');
+  link.click();
+  showToast('PNG downloaded ✓');
+});
+
+btnSvg.addEventListener('click', () => {
+  if (!currentCanvas) return;
+  const size = currentCanvas.width;
+  const fgColor = hexFg.value || colorFg.value;
+  const bgColor = hexBg.value || colorBg.value;
+
+  /* Build SVG from canvas pixel data */
+  const ctx = currentCanvas.getContext('2d');
+  const imgData = ctx.getImageData(0, 0, size, size);
+  const data = imgData.data;
+
+  let rects = '';
+  const cellSize = 1; // 1px per SVG unit
+
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const i = (y * size + x) * 4;
+      const r = data[i], g = data[i+1], b = data[i+2];
+      const hex = '#' + [r,g,b].map(v => v.toString(16).padStart(2,'0')).join('');
+      if (hex.toLowerCase() !== bgColor.toLowerCase() && r < 200 && g < 200 && b < 200) {
+        rects += `<rect x="${x}" y="${y}" width="1" height="1" fill="${fgColor}"/>`;
+      }
+    }
+  }
+
+  const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}">
+  <rect width="${size}" height="${size}" fill="${bgColor}"/>
+  ${rects}
+</svg>`;
+
+  const blob = new Blob([svg], { type: 'image/svg+xml' });
+  const link = document.createElement('a');
+  link.download = 'qrcode.svg';
+  link.href = URL.createObjectURL(blob);
+  link.click();
+  URL.revokeObjectURL(link.href);
+  showToast('SVG downloaded ✓');
+});
+
+btnCopy.addEventListener('click', async () => {
+  if (!currentCanvas) return;
+  try {
+    currentCanvas.toBlob(async blob => {
+      await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+      showToast('Copied to clipboard ✓');
+    });
+  } catch {
+    showToast('Copy not supported in this browser');
+  }
+});
+
+/* ─── TOAST ─── */
+let toastTimer;
+function showToast(msg) {
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
+}
+
+/* ─── ADSENSE INIT ─── */
+try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+</script>
+</body>
+</html>
